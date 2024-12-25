@@ -29,10 +29,10 @@
             <a class="nav-link active" aria-current="page" href="/index">Index</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/customer/create">Customer Create</a>
+            <a class="nav-link" href="/login/signUp">Sign Up</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/customer/search">Customer Search</a>
+            <a class="nav-link" href="/login/login">Login</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/employee/create">Employee Create</a>
