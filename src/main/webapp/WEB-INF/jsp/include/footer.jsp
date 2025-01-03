@@ -7,7 +7,7 @@
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<section class="bg-footer pt-4 pb-4">
+<section class="bg-footer pt-4 pb-4 bg-light4">
   <div class="container">
     <div class="row">
       <div class="col-12">

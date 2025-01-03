@@ -30,6 +30,8 @@ public class Entry implements Serializable {
     @ToString.Exclude
     private Set<BudgetEntry> budgetEntries;
 
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "amount")
     private float amount;
