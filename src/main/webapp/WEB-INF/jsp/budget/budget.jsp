@@ -45,4 +45,17 @@
     </div>
 </section>
 
+<section>
+    <div class="container">
+        <h2>Budget</h2>
+        <tr>
+            <th>Budget description</th>
+            <th>Amount</th>
+            <th>Date</th>
+        </tr>
+
+    </div>
+</section>
+
+
 <jsp:include page="../include/footer.jsp"/>

@@ -36,7 +36,7 @@
             <div class="mt-3 row justify-content center align-items center">
                 <label for="date" class="col-sm-2 col-form-label">Enter date</label>
                 <div class="col-sm-10 col-lg-6 align-items center">
-                    <input type="text" class="form-control" id="date" name="date">
+                    <input type="date" class="form-control" id="date" name="date">
                 </div>
             </div>
 
@@ -52,4 +52,15 @@
     </div>
 </section>
 
+<section>
+    <div class="container">
+       <h2>Income</h2>
+        <tr>
+            <th>Income description</th>
+            <th>Amount</th>
+            <th>Date</th>
+        </tr>
+
+    </div>
+</section>
 <jsp:include page="../include/footer.jsp"/>

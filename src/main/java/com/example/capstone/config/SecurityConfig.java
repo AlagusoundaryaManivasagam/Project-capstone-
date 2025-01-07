@@ -23,12 +23,12 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable());
 
-        http.authorizeHttpRequests()
+        /*http.authorizeHttpRequests()
                 //require authentication for /customer/** and /employee/** endpoints
                 .requestMatchers("/entries/**").authenticated()
                 .requestMatchers("/budget/**").authenticated()
                 //rest all are free
-                .anyRequest().permitAll();
+                .anyRequest().permitAll();*/
 
         http.formLogin(formLogin -> formLogin
                 .loginPage("/login/login")
@@ -40,6 +40,10 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/")
                 .deleteCookies("userName", "JSESSIONID"));
 
+        http.exceptionHandling(exception -> exception
+                .accessDeniedPage("/error/404"));
+
+
         return http.build();
     }
 
@@ -48,6 +52,10 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
 
 }
 

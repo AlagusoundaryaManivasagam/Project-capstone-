@@ -40,27 +40,60 @@
 
     <section class= "py-5">
         <div class="container">
-            <form action="">
+            <form action="/login/signUpSubmit" method="post">
                 <div class="mt-3 row justify-content center align-items center">
                     <label for="username" class="col-sm-2 col-form-label">User Name</label>
                     <div class="col-sm-10 col-lg-6 align-items center">
-                        <input type="text" class="form-control" id="username" name="username">
+                        <input type="text" class="form-control" id="username" name="username" value="${form.username}">
                     </div>
                 </div>
+                <c:if test="${bindingResult.hasFieldErrors('username')}">
+                    <div class="row justify-content-center">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-10 col-lg-6">
+                            <c:forEach var="error" items="${bindingResult.getFieldErrors('username')}">
+                                <dd class="mb-0 form_input_error">${error.getDefaultMessage()}</dd>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </c:if>
+
 
                 <div class="mt-3 row justify-content center align-items center">
                     <label for="email" class="col-sm-2 col-form-label">Email</label>
                     <div class="col-sm-10 col-lg-6 align-items center">
-                        <input type="text" class="form-control" id="email" name="email">
+                        <input type="text" class="form-control" id="email" name="email" value="${form.email}">
                     </div>
                 </div>
+                <c:if test="${bindingResult.hasFieldErrors('email')}">
+                    <div class="row justify-content-center">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-10 col-lg-6">
+                            <c:forEach var="error" items="${bindingResult.getFieldErrors('email')}">
+                                <dd class="mb-0 form_input_error">${error.getDefaultMessage()}</dd>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </c:if>
+
 
                 <div class="mt-3 row justify-content center align-items center">
                     <label for="password" class="col-sm-2 col-form-label">Enter Password</label>
                     <div class="col-sm-10 col-lg-6">
-                        <input type="text" class="form-control align-items center" id="password" name="password">
+                        <input type="text" class="form-control align-items center" id="password" name="password" value="${form.password}">
                     </div>
                 </div>
+                <c:if test="${bindingResult.hasFieldErrors('password')}">
+                    <div class="row justify-content-center">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-10 col-lg-6">
+                            <c:forEach var="error" items="${bindingResult.getFieldErrors('password')}">
+                                <dd class="mb-0 form_input_error">${error.getDefaultMessage()}</dd>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </c:if>
+
 
                 <div class="mt-3 row justify-content center align-items center">
                     <label for="confirmPassword" class="col-sm-2 col-form-label">Confirm Password</label>
