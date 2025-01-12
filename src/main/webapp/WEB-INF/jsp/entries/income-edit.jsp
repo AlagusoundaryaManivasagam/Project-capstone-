@@ -11,24 +11,24 @@
 <section class=" py-5">
     <div class="container">
         <div class="row">
-            <h1 class="m-0 text-center">Expense</h1>
+            <h1 class="m-0 text-center">Income</h1>
         </div>
     </div>
 </section>
 
 <section class= "py-5">
     <div class="container">
-        <form action="/entries/expense-create" method="post">
+        <form action="/entries/income-create" method="post">
 
-
+            <input type="hidden" name="id" value="${form.id}"/>
 
             <div class="mt-3 row justify-content center align-items center">
-                <label for="description" class="col-sm-2 col-form-label">Enter expense description</label>
+                <label for="description" class="col-sm-2 col-form-label">Enter income description</label>
                 <div class="col-sm-10 col-lg-6 align-items center">
-                    <input type="text" class="form-control" id="description" name="description">
+                    <input type="text" class="form-control" id="description" name="description" value="${form.description}">
                 </div>
             </div>
-            <c:if test="${bindingResult.hasFieldErrors('descriptio')}">
+            <c:if test="${bindingResult.hasFieldErrors('description')}">
                 <div class="row justify-content-center">
                     <div class="col-sm-2"></div>
                     <div class="col-sm-10 col-lg-6">
@@ -43,7 +43,7 @@
             <div class="mt-3 row justify-content center align-items center">
                 <label for="amount" class="col-sm-2 col-form-label">Enter amount</label>
                 <div class="col-sm-10 col-lg-6 align-items center">
-                    <input type="number" class="form-control" id="amount" name="amount">
+                    <input type="number" class="form-control" id="amount" name="amount" value="${form.amount}">
                 </div>
             </div>
             <c:if test="${bindingResult.hasFieldErrors('amount')}">
@@ -61,7 +61,7 @@
             <div class="mt-3 row justify-content center align-items center">
                 <label for="date" class="col-sm-2 col-form-label">Enter date</label>
                 <div class="col-sm-10 col-lg-6 align-items center">
-                    <input type="date" class="form-control" id="date" name="date">
+                    <input type="date" class="form-control" id="date" name="date" value="${form.date}">
                 </div>
             </div>
             <c:if test="${bindingResult.hasFieldErrors('date')}">
@@ -77,6 +77,7 @@
 
 
 
+
             <div class="mt-3 row justify-content-center align-items center">
                 <div class="col-sm-12 col-lg-8 align-items center">
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -87,38 +88,4 @@
     </div>
 </section>
 
-<c:if test="${not empty message}">
-    <section>
-        <div>
-            <h4 class="text-center">${message}</h4>
-        </div>
-    </section>
-</c:if>
-
-<c:if test="${not empty expenses}">
-<section>
-    <div class="container">
-        <h2 class="text-center">Expense</h2>
-        <table class="table mt-5">
-        <tr>
-            <th>Expense description</th>
-            <th>Amount</th>
-            <th>Date</th>
-            <th>Actions</th>
-        </tr>
-
-        <c:forEach var="expense" items = "${expenses}">
-            <tr>
-                <td>${expense.description}</td>
-                <td>${expense.amount}</td>
-                <td>${expense.date}</td>
-                <td><a href="/entries/expense-edit/${expense.id}">Edit</a>
-                    <a href="/entries/expense-delete/${expense.id}">Delete</a></td>
-
-            </tr>
-        </c:forEach>
-        </table>
-    </div>
-</section>
-</c:if>
 <jsp:include page="../include/footer.jsp"/>

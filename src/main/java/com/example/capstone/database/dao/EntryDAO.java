@@ -12,4 +12,5 @@ import java.util.List;
 public interface EntryDAO extends JpaRepository<Entry, Long> {
 @Query("SELECT e from Entry e where e.userId = :userId and e.flag = :flag")
     public List<Entry> getEntries(int userId, String flag);
+    Entry findById(Integer entryId);
 }

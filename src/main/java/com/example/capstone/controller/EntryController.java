@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -60,8 +61,14 @@ public class EntryController {
 
         }else {
 
-
-            Entry income = new Entry();
+            response.setViewName("entries/income");
+            Entry income = entryDAO.findById(form.getId());
+            if(income == null){
+             income = new Entry();
+            }else{
+                String message ="Income edited" ;
+                response.addObject("message", message);
+            }
             income.setAmount(form.getAmount());
             income.setDate(form.getDate());
             income.setDescription(form.getDescription());
@@ -78,6 +85,39 @@ public class EntryController {
 
     }
 
+    @GetMapping("entries/income-edit/{incomeId}")
+    public ModelAndView incomeEdit(@PathVariable Integer incomeId){
+        ModelAndView response= new ModelAndView();
+        response.setViewName("entries/income-edit");
+        Entry income = entryDAO.findById(incomeId);
+        CreateEntryFormBean form = new CreateEntryFormBean();
+        form.setAmount(income.getAmount());
+        form.setDate(income.getDate());
+        form.setDescription(income.getDescription());
+        form.setFlag(income.getFlag());
+        form.setId(income.getId());
+        form.setUserId(income.getUser().getId());
+        response.addObject("form", form);
+        return response;
+    }
+
+    @GetMapping("/entries/income-delete/{incomeId}")
+    public ModelAndView deleteIncome(@PathVariable Integer incomeId){
+        ModelAndView response= new ModelAndView();
+        response.setViewName("entries/income");
+        Entry income = entryDAO.findById(incomeId);
+        entryDAO.delete(income);
+        String message= "Income deleted" ;
+        response.addObject("message", message);
+        User loggedInUser = authenticatedUserService.loadCurrentUser();
+        String flag = "i";
+        List<Entry> incomes = entryDAO.getEntries(loggedInUser.getId(), flag);
+        response.addObject("incomes", incomes);
+        response.setViewName("redirect:/entries/income");
+        return response;
+
+
+    }
 
     @GetMapping("/entries/expense")
     public ModelAndView expense(){
@@ -106,7 +146,13 @@ public class EntryController {
 
         }else {
             response.setViewName("entries/expense");
-            Entry expense = new Entry();
+            Entry expense = entryDAO.findById(form.getId());
+            if(expense==null){
+             expense = new Entry();
+            }else{
+                String message = "Expense edited";
+                response.addObject("message", message);
+            }
             expense.setAmount(form.getAmount());
             expense.setDate(form.getDate());
             expense.setDescription(form.getDescription());
@@ -117,5 +163,39 @@ public class EntryController {
             response.setViewName("redirect:/entries/expense");
         }
         return response;
+    }
+
+    @GetMapping("/entries/expense-edit/{expenseId}")
+    public ModelAndView expenseEdit(@PathVariable Integer expenseId){
+        ModelAndView response= new ModelAndView();
+        response.setViewName("entries/expense-edit");
+        Entry expense= entryDAO.findById(expenseId);
+        CreateEntryFormBean form = new CreateEntryFormBean();
+        form.setAmount(expense.getAmount());
+        form.setDate(expense.getDate());
+        form.setDescription(expense.getDescription());
+        form.setFlag(expense.getFlag());
+        form.setUserId(expense.getUser().getId());
+        form.setId(expense.getId());
+        response.addObject("form", form);
+        return response;
+    }
+
+    @GetMapping("/entries/expense-delete/{expenseId}")
+    public ModelAndView expenseDelete(@PathVariable Integer expenseId){
+        ModelAndView response= new ModelAndView();
+        response.setViewName("entries/expense");
+        Entry expense= entryDAO.findById(expenseId);
+        entryDAO.delete(expense);
+        String message = "Expense deleted";
+        response.addObject("message", message);
+        User loggedInUser = authenticatedUserService.loadCurrentUser();
+        String flag = "e";
+        List<Entry> expenses = entryDAO.getEntries(loggedInUser.getId(), flag);
+        response.addObject("expenses", expenses);
+
+        response.setViewName("redirect:/entries/expense");
+        return response;
+
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -55,7 +56,15 @@ public class BudgetController {
             response.addObject("form", form);
 
         }else {
-            Budget budget = new Budget();
+            response.setViewName("budget/budget");
+            Budget budget = budgetDAO.findById(form.getId());
+
+            if(budget == null){
+                budget = new Budget();
+            }else{
+                String message = "Budget edited";
+                response.addObject("message", message);
+            }
             budget.setAmount(form.getAmount());
             budget.setDescription(form.getDescription());
             budget.setUser(user);
@@ -63,6 +72,36 @@ public class BudgetController {
             budgetDAO.save(budget);
             response.setViewName("redirect:/budget/budget");
         }
+        return response;
+    }
+
+    @GetMapping("/budget/budget-edit/{budgetId}")
+    public ModelAndView budgetEdit(@PathVariable Integer budgetId){
+        ModelAndView response = new ModelAndView();
+        response.setViewName("budget/budget-edit");
+        Budget budget = budgetDAO.findById(budgetId);
+        CreateBudgetFormBean form = new CreateBudgetFormBean();
+        form.setAmount(budget.getAmount());
+        form.setDescription(budget.getDescription());
+        form.setId(budget.getId());
+        form.setUserId(budget.getUser().getId());
+        response.addObject("form", form);
+        return response;
+    }
+
+    @GetMapping("/budget/budget-delete/{budgetId}")
+    public ModelAndView budgetDelete(@PathVariable Integer budgetId){
+        ModelAndView response = new ModelAndView();
+        response.setViewName("budget/budget");
+        Budget budget = budgetDAO.findById(budgetId);
+        budgetDAO.delete(budget);
+        String message = "Budget deleted";
+        response.addObject("message", message);
+        User user = authenticatedUserService.loadCurrentUser();
+        List<Budget> budgets = budgetDAO.getBudgetEntries(user.getId());
+        response.addObject("budgets", budgets);
+
+        response.setViewName("redirect:/budget/budget");
         return response;
     }
 }
