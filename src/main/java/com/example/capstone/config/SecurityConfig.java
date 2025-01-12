@@ -23,6 +23,12 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable());
 
+        /*http.authorizeHttpRequests((authorize) -> authorize
+                .anyRequest().authenticated()
+                .requestMatchers("/pub/**").permitAll()
+
+        );*/
+
         /*http.authorizeHttpRequests()
                 //require authentication for /customer/** and /employee/** endpoints
                 .requestMatchers("/entries/**").authenticated()
@@ -32,7 +38,8 @@ public class SecurityConfig {
 
         http.formLogin(formLogin -> formLogin
                 .loginPage("/login/login")
-                .loginProcessingUrl("/login/loginSubmit"));
+                .loginProcessingUrl("/login/loginSubmit")
+                .defaultSuccessUrl("/entries/income"));
 
         http.logout(formLogout -> formLogout
                 .invalidateHttpSession(true)

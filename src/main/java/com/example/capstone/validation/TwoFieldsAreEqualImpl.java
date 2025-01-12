@@ -1,8 +1,9 @@
 package com.example.capstone.validation;
 
+import com.example.capstone.validation.TwoFieldsAreEqual;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
+import org.apache.commons.beanutils.BeanUtils;
 
 
 public class TwoFieldsAreEqualImpl implements ConstraintValidator<TwoFieldsAreEqual, Object> {
@@ -22,25 +23,19 @@ public class TwoFieldsAreEqualImpl implements ConstraintValidator<TwoFieldsAreEq
             return true;
         }
 
-//         <dependency>
-//                <groupId>commons-beanutils</groupId>
-//                <artifactId>commons-beanutils</artifactId>
-//                <version>1.9.4</version>
-//                </dependency>
-
         try {
-//            final String fieldOneValue = BeanUtils.getProperty(value, fieldOneName);
-//            final String fieldTwoValue = BeanUtils.getProperty(value, fieldTwoName);
+            final String fieldOneValue = BeanUtils.getProperty(value, fieldOneName);
+            final String fieldTwoValue = BeanUtils.getProperty(value, fieldTwoName);
 
             // both are null
-//            if (fieldOneValue == null && fieldTwoValue == null) {
-//                return true;
-//            }
-//
-//            // if the are equal then return true
-//            if (fieldOneValue.equals(fieldTwoValue)) {
-//                return true;
-//            }
+            if (fieldOneValue == null && fieldTwoValue == null) {
+                return true;
+            }
+
+            // if the are equal then return true
+            if (fieldOneValue.equals(fieldTwoValue)) {
+                return true;
+            }
 
         } catch (Exception e) {
             // do nothing
@@ -55,3 +50,12 @@ public class TwoFieldsAreEqualImpl implements ConstraintValidator<TwoFieldsAreEq
     }
 
 }
+
+
+
+
+
+
+
+
+

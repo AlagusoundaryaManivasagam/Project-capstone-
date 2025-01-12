@@ -39,7 +39,7 @@
         </section>
         <section class= "py-5">
             <div class="container">
-                <form action="">
+                <form action="/login/loginSubmit" method="post">
                     <div class="mt-3 row justify-content center align-items center">
                         <label for="username" class="col-sm-2 col-form-label">UserName</label>
                         <div class="col-sm-10 col-lg-6 align-items center">

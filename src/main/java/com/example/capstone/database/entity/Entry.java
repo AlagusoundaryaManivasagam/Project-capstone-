@@ -2,8 +2,10 @@ package com.example.capstone.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -36,8 +38,9 @@ public class Entry implements Serializable {
     @Column(name = "amount")
     private float amount;
 
-    @Column(name = "date", columnDefinition = "Date")
-    private Date date;
+    //@DateTimeFormat(pattern = "MM/dd/yyyy")
+    @Column(name = "date", columnDefinition = "Date", nullable = false)
+    private LocalDate date;
 
     @Column(name = "user_id", insertable = false, updatable = false)
     private Integer userId;

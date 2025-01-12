@@ -101,6 +101,17 @@
                         <input type="text" class="form-control align-items center" id="confirmPassword" name="confirmPassword">
                     </div>
                 </div>
+                <c:if test="${bindingResult.hasFieldErrors('confirmPassword')}">
+                    <div class="row justify-content-center">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-10 col-lg-6">
+                            <c:forEach var="error" items="${bindingResult.getFieldErrors('confirmPassword')}">
+                                <dd class="mb-0 form_input_error">${error.getDefaultMessage()}</dd>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </c:if>
+
 
 
                 <div class="mt-3 row justify-content-center align-items center">
