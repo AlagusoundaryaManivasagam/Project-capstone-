@@ -28,4 +28,6 @@ public class CreateEntryFormBean {
     private Integer userId;
 
     private String flag;
+
+    private String budgetCategory;
 }

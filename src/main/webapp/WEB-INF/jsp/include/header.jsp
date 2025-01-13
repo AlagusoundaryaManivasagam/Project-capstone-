@@ -44,6 +44,9 @@
           <li class="nav-item">
             <a class="nav-link" href="/budget/budget">Budget</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/summary/summary">Financial Summary</a>
+          </li>
 
           <sec:authorize access="isAuthenticated()">
             <li class="nav-item">

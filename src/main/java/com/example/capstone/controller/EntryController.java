@@ -1,6 +1,8 @@
 package com.example.capstone.controller;
 
+import com.example.capstone.database.dao.BudgetDAO;
 import com.example.capstone.database.dao.EntryDAO;
+import com.example.capstone.database.entity.Budget;
 import com.example.capstone.database.entity.Entry;
 import com.example.capstone.database.entity.User;
 import com.example.capstone.form.CreateEntryFormBean;
@@ -30,6 +32,8 @@ public class EntryController {
 
     @Autowired
     private EntryDAO entryDAO;
+    @Autowired
+    private BudgetDAO budgetDAO;
     @Autowired
     private AuthenticatedUserService authenticatedUserService;
 
@@ -127,6 +131,9 @@ public class EntryController {
         String flag = "e";
         List<Entry> expenses = entryDAO.getEntries(loggedInUser.getId(), flag);
         response.addObject("expenses", expenses);
+
+        List<Budget> budgets = budgetDAO.getBudgetEntries(loggedInUser.getId());
+        response.addObject("budgets", budgets);
         return response;
     }
 
