@@ -14,4 +14,10 @@ public interface BudgetDAO extends JpaRepository<Budget, Long> {
     public List<Budget> getBudgetEntries(int userId);
 
     Budget findById(Integer budgetId);
+
+    @Query("select b from Budget b where b.id= :userId and b.description = :description")
+    Budget findByDecriptionAndUserId(int userId, String description);
+
+
+
 }

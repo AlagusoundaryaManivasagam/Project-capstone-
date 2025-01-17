@@ -29,5 +29,5 @@ public class CreateEntryFormBean {
 
     private String flag;
 
-    private String budgetCategory;
+    private Integer budgetCategory;
 }

@@ -1,11 +1,14 @@
 package com.example.capstone.controller;
 
 import com.example.capstone.database.dao.BudgetDAO;
+import com.example.capstone.database.dao.BudgetEntryDAO;
 import com.example.capstone.database.dao.EntryDAO;
 import com.example.capstone.database.entity.Budget;
+import com.example.capstone.database.entity.BudgetEntry;
 import com.example.capstone.database.entity.Entry;
 import com.example.capstone.database.entity.User;
 import com.example.capstone.form.CreateEntryFormBean;
+import com.example.capstone.form.CreateListFormBean;
 import com.example.capstone.security.AuthenticatedUserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static com.mysql.cj.conf.PropertyKey.logger;
@@ -36,15 +42,49 @@ public class EntryController {
     private BudgetDAO budgetDAO;
     @Autowired
     private AuthenticatedUserService authenticatedUserService;
+    @Autowired
+    private BudgetEntryDAO budgetEntryDAO;
 
     @GetMapping("/entries/income")
-    public ModelAndView income(){
+    public ModelAndView income(CreateListFormBean form){
         ModelAndView response= new ModelAndView();
         response.setViewName("entries/income");
         User loggedInUser = authenticatedUserService.loadCurrentUser();
         String flag = "i";
-        List<Entry> incomes = entryDAO.getEntries(loggedInUser.getId(), flag);
-        response.addObject("incomes", incomes);
+        log.debug("{} ",form.getYear() );
+        log.debug("{}", form.getMonth());
+        if(form.getYear()!= null && form.getMonth()!= null){
+            int month= Month.valueOf(form.getMonth().trim().toUpperCase()).getValue();
+            int year = form.getYear();
+            List<Entry> incomes = entryDAO.getEntries(loggedInUser.getId(), flag, month, year);
+            response.addObject("month", form.getMonth());
+            response.addObject("year", year);
+            response.addObject("incomes", incomes);
+            response.addObject("size",incomes.size());
+
+        }else {
+            Calendar calendar = Calendar.getInstance();
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int year = calendar.get(Calendar.YEAR);
+            List<Entry> incomes = entryDAO.getEntries(loggedInUser.getId(), flag, month, year);
+            response.addObject("incomes", incomes);
+
+        }
+        String[] months={"January","February","March","April","May","June",
+                "July","August","September", "October","November","December"};
+        Calendar calendar = Calendar.getInstance();
+        int current= calendar.get(Calendar.MONTH);
+        String currentMonth = months[current];
+        response.addObject("months",months);
+        response.addObject("currentMonth",currentMonth);
+        List<Integer> years = new ArrayList<>();
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        for (int i = 2000; i <= currentYear + 10; i++) { // Next 10 years
+            years.add(i);
+        }
+        response.addObject("years",years);
+        response.addObject("currentYear",currentYear);
+
         return response;
     }
 
@@ -65,7 +105,7 @@ public class EntryController {
 
         }else {
 
-            response.setViewName("entries/income");
+            //response.setViewName("entries/income");
             Entry income = entryDAO.findById(form.getId());
             if(income == null){
              income = new Entry();
@@ -79,10 +119,30 @@ public class EntryController {
             income.setFlag("i");
             income.setUser(loggedInUser);
 
-
-
             entryDAO.save(income);
-            response.setViewName("redirect:/entries/income");
+            int month= income.getDate().getMonthValue();
+            int year = income.getDate().getYear();
+            String flag = "i";
+            List<Entry> incomes = entryDAO.getEntries(loggedInUser.getId(), flag, month, year);
+            response.addObject("incomes", incomes);
+
+            String[] months={"January","February","March","April","May","June",
+                    "July","August","September", "October","November","December"};
+            Calendar calendar = Calendar.getInstance();
+            int current= month-1;
+            String currentMonth = months[current];
+            response.addObject("months",months);
+            response.addObject("currentMonth",currentMonth);
+            List<Integer> years = new ArrayList<>();
+            int cYear = Calendar.getInstance().get(Calendar.YEAR);
+            for (int i = 2000; i <= cYear + 10; i++) { // Next 10 years
+                years.add(i);
+            }
+            int currentYear = year;
+            response.addObject("years",years);
+            response.addObject("currentYear",currentYear);
+
+            response.setViewName("entries/income");
         }
 
         return response;
@@ -110,30 +170,62 @@ public class EntryController {
         ModelAndView response= new ModelAndView();
         response.setViewName("entries/income");
         Entry income = entryDAO.findById(incomeId);
+        int month = income.getDate().getMonthValue();
+        int year = income.getDate().getYear();
+        log.debug("Year is {} and month is {}",year,month);
         entryDAO.delete(income);
         String message= "Income deleted" ;
         response.addObject("message", message);
         User loggedInUser = authenticatedUserService.loadCurrentUser();
         String flag = "i";
-        List<Entry> incomes = entryDAO.getEntries(loggedInUser.getId(), flag);
+        List<Entry> incomes = entryDAO.getEntries(loggedInUser.getId(), flag, month, year);
         response.addObject("incomes", incomes);
-        response.setViewName("redirect:/entries/income");
+        //response.setViewName("redirect/entries/income");
         return response;
 
 
     }
 
     @GetMapping("/entries/expense")
-    public ModelAndView expense(){
+    public ModelAndView expense(CreateListFormBean form){
         ModelAndView response= new ModelAndView();
         response.setViewName("entries/expense");
         User loggedInUser = authenticatedUserService.loadCurrentUser();
         String flag = "e";
-        List<Entry> expenses = entryDAO.getEntries(loggedInUser.getId(), flag);
-        response.addObject("expenses", expenses);
+        if(form.getYear()!= null && form.getMonth()!= null){
+            int month= Month.valueOf(form.getMonth().trim().toUpperCase()).getValue();
+            int year = form.getYear();
+            List<Entry> expenses = entryDAO.getEntries(loggedInUser.getId(), flag, month, year);
+            response.addObject("month", form.getMonth());
+            response.addObject("year", year);
+            response.addObject("expenses", expenses);
+            response.addObject("size",expenses.size());
 
+        }else {
+            Calendar calendar = Calendar.getInstance();
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int year = calendar.get(Calendar.YEAR);
+            List<Entry> expenses = entryDAO.getEntries(loggedInUser.getId(), flag, month, year);
+            response.addObject("expenses", expenses);
+        }
         List<Budget> budgets = budgetDAO.getBudgetEntries(loggedInUser.getId());
         response.addObject("budgets", budgets);
+
+        String[] months={"January","February","March","April","May","June",
+                "July","August","September", "October","November","December"};
+        Calendar calendar = Calendar.getInstance();
+        int current= calendar.get(Calendar.MONTH);
+        String currentMonth = months[current];
+        response.addObject("months",months);
+        response.addObject("currentMonth",currentMonth);
+        List<Integer> years = new ArrayList<>();
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        for (int i = 2000; i <= currentYear + 10; i++) { // Next 10 years
+            years.add(i);
+        }
+        response.addObject("years",years);
+        response.addObject("currentYear",currentYear);
+
         return response;
     }
 
@@ -154,9 +246,14 @@ public class EntryController {
         }else {
             response.setViewName("entries/expense");
             Entry expense = entryDAO.findById(form.getId());
+            Budget budget= new Budget();
             if(expense==null){
              expense = new Entry();
+             budget = budgetDAO.findById(form.getBudgetCategory());
+
+
             }else{
+                budget = budgetDAO.findById(form.getBudgetCategory());
                 String message = "Expense edited";
                 response.addObject("message", message);
             }
@@ -167,13 +264,48 @@ public class EntryController {
             expense.setUser(loggedInUser);
 
             entryDAO.save(expense);
-            response.setViewName("redirect:/entries/expense");
+            BudgetEntry budgetEntry= new BudgetEntry();
+
+            if(form.getId() == null){
+            budgetEntry.setEntry(expense);
+            budgetEntry.setBudget(budget);
+            budgetEntry.setDate(form.getDate());
+            budgetEntryDAO.save(budgetEntry);
+            }
+            else{
+                budgetEntry= budgetEntryDAO.getByExpenseId(expense.getId());
+                budgetEntry.setBudget(budget);
+                budgetEntry.setDate(form.getDate());
+                budgetEntryDAO.save(budgetEntry);
+            }
+            int month = expense.getDate().getMonthValue();
+            int year = expense.getDate().getYear();
+            String flag = "e";
+            List<Entry> expenses = entryDAO.getEntries(loggedInUser.getId(), flag, month, year);
+            response.addObject("expenses",expenses);
+            //response.setViewName("redirect:/entries/expense");
         }
+        String[] months={"January","February","March","April","May","June",
+                "July","August","September", "October","November","December"};
+        Calendar calendar = Calendar.getInstance();
+        int current= calendar.get(Calendar.MONTH);
+        String currentMonth = months[current];
+        response.addObject("months",months);
+        response.addObject("currentMonth",currentMonth);
+        List<Integer> years = new ArrayList<>();
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        for (int i = 2000; i <= currentYear + 10; i++) { // Next 10 years
+            years.add(i);
+        }
+        response.addObject("years",years);
+        response.addObject("currentYear",currentYear);
+
         return response;
     }
 
     @GetMapping("/entries/expense-edit/{expenseId}")
     public ModelAndView expenseEdit(@PathVariable Integer expenseId){
+        User loggedInUser = authenticatedUserService.loadCurrentUser();
         ModelAndView response= new ModelAndView();
         response.setViewName("entries/expense-edit");
         Entry expense= entryDAO.findById(expenseId);
@@ -184,6 +316,13 @@ public class EntryController {
         form.setFlag(expense.getFlag());
         form.setUserId(expense.getUser().getId());
         form.setId(expense.getId());
+        BudgetEntry budgetEntry = budgetEntryDAO.getByExpenseId(expense.getId());
+        Integer budgetCategory = budgetEntry.getBudgetId();
+        form.setBudgetCategory(budgetCategory);
+        List<Budget> budgets = budgetDAO.getBudgetEntries(loggedInUser.getId());
+        response.addObject("budgets", budgets);
+        response.addObject("budgetCategory", budgetCategory);
+
         response.addObject("form", form);
         return response;
     }
@@ -193,15 +332,17 @@ public class EntryController {
         ModelAndView response= new ModelAndView();
         response.setViewName("entries/expense");
         Entry expense= entryDAO.findById(expenseId);
+        int month = expense.getDate().getMonthValue();
+        int year = expense.getDate().getYear();
         entryDAO.delete(expense);
         String message = "Expense deleted";
         response.addObject("message", message);
         User loggedInUser = authenticatedUserService.loadCurrentUser();
         String flag = "e";
-        List<Entry> expenses = entryDAO.getEntries(loggedInUser.getId(), flag);
+        List<Entry> expenses = entryDAO.getEntries(loggedInUser.getId(), flag, month, year);
         response.addObject("expenses", expenses);
 
-        response.setViewName("redirect:/entries/expense");
+        //response.setViewName("redirect:/entries/expense");
         return response;
 
     }

@@ -39,7 +39,7 @@ public class SecurityConfig {
         http.formLogin(formLogin -> formLogin
                 .loginPage("/login/login")
                 .loginProcessingUrl("/login/loginSubmit")
-                .defaultSuccessUrl("/entries/income"));
+                .defaultSuccessUrl("/profile/profile"));
 
         http.logout(formLogout -> formLogout
                 .invalidateHttpSession(true)

@@ -85,10 +85,63 @@
     </div>
 </section>
 
+<c:if test="${not empty message}">
+<section>
+    <div class="alert alert-success">
+        <h4 class="text-center">${message}</h4>
+    </div>
+</section>
+</c:if>
+
+<h2 class="text-center">Income entries</h2>
+<form action="/entries/income" method="get">
+    <div class="row">
+        <div class="col-6"></div>
+
+        <div class="col-6">
+            <label for="month">Month</label>
+            <select id="month" name="month">
+                <option value=""></option>
+
+                <c:forEach var="month"  items="${months}">
+                    <option value="${month}"
+                            <c:if test="${month eq currentMonth}">selected</c:if>>
+                            ${month}
+                    </option>
+                </c:forEach>
+
+            </select>
+
+            <label for="year">Year</label>
+            <select id="year" name="year">
+                <option value=""></option>
+
+                <c:forEach var="year"  items="${years}">
+                    <option value="${year}"
+                            <c:if test="${year eq currentYear}">selected</c:if>>
+                            ${year}
+                    </option>
+                </c:forEach>
+
+            </select>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+
+    </div>
+</form>
+
+<c:if test="${not empty month &&  year!= null && size != null}">
+    <div>
+        <h5>Income Entries for ${month}, ${year}(${size})</h5>
+    </div>
+
+</c:if>
+
 <c:if test="${not empty incomes}">
 <section>
     <div class="container">
-       <h2 class="text-center">Income</h2>
+
 
         <table class="table mt-5">
         <tr>

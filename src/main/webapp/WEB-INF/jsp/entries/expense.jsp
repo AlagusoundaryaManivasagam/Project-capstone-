@@ -78,7 +78,7 @@
             <div class="mt-3 row justify-content center align-items center">
                 <label for="budgetCategory" class="col-sm-2 col-form-label">Choose Budget Category</label>
                 <div class="col-sm-10 col-lg-6 align-items center">
-                    <select name="budgetCategory" id="budgetCategory" class="form-control">
+                    <select name="budgetCategory" id="budgetCategory" class="form-control" >
                         <option value=""></option>
                         <c:forEach var="budget" items="${budgets}">
                             <option value="${budget.id}">${budget.description}</option>
@@ -86,6 +86,7 @@
                     </select>
                 </div>
             </div>
+
 
 
             <div class="mt-3 row justify-content-center align-items center">
@@ -100,16 +101,60 @@
 
 <c:if test="${not empty message}">
     <section>
-        <div>
+        <div class="alert alert-success">
             <h4 class="text-center">${message}</h4>
         </div>
     </section>
 </c:if>
 
+<h2 class="text-center">Expense entries</h2>
+<form action="/entries/expense" method="get">
+    <div class="row">
+        <div class="col-6"></div>
+
+        <div class="col-6">
+            <label for="month">Month</label>
+            <select id="month" name="month">
+                <option value=""></option>
+
+                <c:forEach var="month"  items="${months}">
+                    <option value="${month}"
+                            <c:if test="${month eq currentMonth}">selected</c:if>>
+                            ${month}
+                    </option>
+                </c:forEach>
+
+            </select>
+
+            <label for="year">Year</label>
+            <select id="year" name="year">
+                <option value=""></option>
+
+                <c:forEach var="year"  items="${years}">
+                    <option value="${year}"
+                            <c:if test="${year eq currentYear}">selected</c:if>>
+                            ${year}
+                    </option>
+                </c:forEach>
+
+            </select>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>
+
+<c:if test="${not empty month &&  year!= null && size != null}">
+    <div>
+        <h5>Expense Entries for ${month}, ${year}(${size})</h5>
+    </div>
+
+</c:if>
+
+
 <c:if test="${not empty expenses}">
 <section>
     <div class="container">
-        <h2 class="text-center">Expense</h2>
         <table class="table mt-5">
         <tr>
             <th>Expense description</th>

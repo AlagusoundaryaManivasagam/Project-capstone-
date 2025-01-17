@@ -75,6 +75,21 @@
                 </div>
             </c:if>
 
+            <div class="mt-3 row justify-content center align-items center">
+                <label for="budgetCategory" class="col-sm-2 col-form-label">Choose Budget Category</label>
+                <div class="col-sm-10 col-lg-6 align-items center">
+                    <select name="budgetCategory" id="budgetCategory" class="form-control" >
+                        <option value=""></option>
+                        <c:forEach var="budget" items="${budgets}">
+                            <option value="${budget.id}"
+                                    <c:if test="${budget.id eq budgetCategory}">selected</c:if>>
+                                    ${budget.description}
+                            </option>
+                        </c:forEach>
+                    </select>
+                </div>
+            </div>
+
 
 
             <div class="mt-3 row justify-content-center align-items center">

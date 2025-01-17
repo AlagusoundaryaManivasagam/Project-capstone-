@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -39,6 +40,6 @@ public class BudgetEntry implements Serializable {
     private Integer expenseId;
 
     @Column(name = "date", columnDefinition = "Date")
-    private Date date;
+    private LocalDate date;
 
 }
