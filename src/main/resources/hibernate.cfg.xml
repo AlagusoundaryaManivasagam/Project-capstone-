@@ -1,0 +1,38 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<!--suppress CheckTagEmptyBody -->
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- MySQL Database -->
+        <!-- Drop and re-create the database on startup -->
+        <property name="hibernate.hbm2ddl.auto"> update </property>
+
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+
+        <!--Creates database, if it does not exist-->
+        <property name="connection.url">jdbc:mysql://localhost:3306/smsdb-ll?createDatabaseIfNotExist=true</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">Root@SQL1,</property>
+
+        <!-- MySQL DB dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        <!-- print all executed SQL on console -->
+        <!--<property name="hibernate.show_sql" >true </property>-->
+        <!-- <property name="hibernate.format_sql" >true </property>-->
+        <!-- allow hibernate to get stuff even after the session is closed -->
+        <property name="hibernate.enable_lazy_load_no_trans">true</property>
+
+        <!--   Mapping entity file -->
+        <mapping class="com.example.capstone.database.entity.Entry"/>
+        <mapping class="com.example.capstone.database.entity.User"/>
+        <mapping class="com.example.capstone.database.entity.Budget"/>
+        <mapping class="com.example.capstone.database.entity.BudgetEntry"/>
+        <mapping class="com.example.capstone.database.entity.UserRole"/>
+
+
+
+    </session-factory>
+</hibernate-configuration>

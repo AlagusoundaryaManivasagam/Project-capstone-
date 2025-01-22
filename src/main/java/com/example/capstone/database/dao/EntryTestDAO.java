@@ -71,4 +71,22 @@ public class EntryTestDAO {
         }
 
     }
+
+    public Entry getENtryByUserIdAndDescriptionAndFlag(int userId, String description, String flag) {
+        Session session = factory.openSession();
+        String hqlQuery = "Select e from Entry e where e.userId = :userId and e.description = :description and e.flag = :flag";
+        TypedQuery<Entry> query = session.createQuery(hqlQuery, Entry.class);
+        query.setParameter("userId",userId);
+        query.setParameter("description",description);
+        query.setParameter("flag",flag);
+        try{
+            Entry entries = query.getSingleResult();
+            return entries;
+        }catch(Exception e){
+
+            return null;
+        }finally{
+            session.close();
+        }
+    }
 }

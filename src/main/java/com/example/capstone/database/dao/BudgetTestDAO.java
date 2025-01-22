@@ -72,4 +72,20 @@ public class BudgetTestDAO {
         }
     }
 
+    public Budget getByDescriptionAndUserId(Integer userId,String description) {
+        Session session = factory.openSession();
+        String hqlQuery = "Select b from Budget b where b.userId=:userId and b.description = :description";
+        TypedQuery<Budget> query = session.createQuery(hqlQuery, Budget.class);
+        query.setParameter("description", description);
+        query.setParameter("userId", userId);
+        try{
+            Budget budget = query.getSingleResult();
+            return budget;
+        }catch(Exception e){
+            return null;
+        }finally{
+            session.close();
+        }
+    }
+
 }
