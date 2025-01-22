@@ -8,7 +8,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:include page="../include/header.jsp"/>
-
+<style>
+    .table-container{
+        display:flex;
+        justify-content: center;
+    }
+</style>
 <section class=" py-5">
     <div class="container">
         <div class="row">
@@ -16,25 +21,31 @@
         </div>
     </div>
 </section>
+<c:if test="${not empty message}"><h4>${message}</h4></c:if>
 
 <section>
     <div class="container">
-        <h2>Total Income   ${totalAmount}</h2>
-        <h2>BudgetedAmount   ${budgetedAmount}</h2>
-        <h2>Difference ${difference}</h2>
+        <div class="table-container">
+        <table class="table-mt-5 ">
+            <tr>
+                <td>Total Income</td>
+                <td>${totalAmount}</td>
+            </tr>
+            <tr>
+                <td>BudgetedAmount</td>
+                <td>${budgetedAmount}</td>
+            </tr>
+            <tr>
+                <td>Difference</td>
+                <td>${difference}</td>
+            </tr>
+        </table>
+        </div>
+    </div>
+</section>
+
+<div class="container">
         <div class="row">
-<%--            <div class="col-3">--%>
-<%--                <label for="totalIncome">Total Income</label>--%>
-<%--                <input type="number" id="totalIncome" value="${totalAmount}">--%>
-<%--            </div>--%>
-<%--            <div class="col-3">--%>
-<%--                <label for="budgetedAmount">Budgeted Amount</label>--%>
-<%--                <input type = "number" id="budgetedAmount" value="${budgetedAmount}">--%>
-<%--            </div>--%>
-<%--            <div class="col-3">--%>
-<%--                <label for="difference">Difference</label>--%>
-<%--                <input type="number" id="difference" value="${difference}">--%>
-<%--            </div>--%>
 
             <form action="/summary/summary">
             <div class="col-3">
@@ -69,8 +80,8 @@
             </div>
             </form>
         </div>
-    </div>
-</section>
+</div>
+
 
 <section>
     <div class="container">

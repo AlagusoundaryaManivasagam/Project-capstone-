@@ -20,7 +20,7 @@ public class CreateEntryFormBean {
     private String description;
 
     @NotNull(message = "Amount is required")
-    private float amount;
+    private Float amount;
 
     @NotNull(message = "Date is required")
     private LocalDate date;
@@ -28,6 +28,7 @@ public class CreateEntryFormBean {
     private Integer userId;
 
     private String flag;
+
 
     private Integer budgetCategory;
 }

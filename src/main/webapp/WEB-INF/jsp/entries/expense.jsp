@@ -28,7 +28,7 @@
                     <input type="text" class="form-control" id="description" name="description">
                 </div>
             </div>
-            <c:if test="${bindingResult.hasFieldErrors('descriptio')}">
+            <c:if test="${bindingResult.hasFieldErrors('description')}">
                 <div class="row justify-content-center">
                     <div class="col-sm-2"></div>
                     <div class="col-sm-10 col-lg-6">
@@ -86,6 +86,16 @@
                     </select>
                 </div>
             </div>
+            <c:if test="${bindingResult.hasFieldErrors('budgetCategory')}">
+                <div class="row justify-content-center">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10 col-lg-6">
+                        <c:forEach var="error" items="${bindingResult.getFieldErrors('budgetCategory')}">
+                            <dd class="mb-0 form_input_error">${error.getDefaultMessage()}</dd>
+                        </c:forEach>
+                    </div>
+                </div>
+            </c:if>
 
 
 

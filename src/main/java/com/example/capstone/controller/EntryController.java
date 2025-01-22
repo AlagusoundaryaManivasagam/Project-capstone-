@@ -12,6 +12,7 @@ import com.example.capstone.form.CreateListFormBean;
 import com.example.capstone.security.AuthenticatedUserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -187,7 +188,7 @@ public class EntryController {
     }
 
     @GetMapping("/entries/expense")
-    public ModelAndView expense(CreateListFormBean form){
+    public ModelAndView expense(CreateListFormBean form, BindingResult bindingResult){
         ModelAndView response= new ModelAndView();
         response.setViewName("entries/expense");
         User loggedInUser = authenticatedUserService.loadCurrentUser();
@@ -211,6 +212,7 @@ public class EntryController {
         List<Budget> budgets = budgetDAO.getBudgetEntries(loggedInUser.getId());
         response.addObject("budgets", budgets);
 
+
         String[] months={"January","February","March","April","May","June",
                 "July","August","September", "October","November","December"};
         Calendar calendar = Calendar.getInstance();
@@ -233,6 +235,15 @@ public class EntryController {
     public ModelAndView expenseSubmit(@Valid CreateEntryFormBean form, BindingResult bindingResult){
         ModelAndView response= new ModelAndView();
         User loggedInUser = authenticatedUserService.loadCurrentUser();
+
+        List<Budget> budgets = budgetDAO.getBudgetEntries(loggedInUser.getId());
+        if(budgets.isEmpty()){
+            bindingResult.rejectValue("budgetCategory","BudgetCategoryCode", "Please create budgets before creating expenses");
+
+        }else if(form.getBudgetCategory()==null){
+            bindingResult.rejectValue("budgetCategory","BudgetCategoryCode", "Please choose one budget Category");
+
+        }
 
         if ( bindingResult.hasErrors() ) {
             for (ObjectError error : bindingResult.getAllErrors()) {

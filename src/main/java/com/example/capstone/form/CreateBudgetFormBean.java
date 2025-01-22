@@ -17,7 +17,7 @@ public class CreateBudgetFormBean {
     private String description;
 
     @NotNull(message = "Amount is required")
-    private float amount;
+    private Float amount;
 
     private Integer userId;
 }

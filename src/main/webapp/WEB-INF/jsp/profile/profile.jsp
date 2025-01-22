@@ -11,6 +11,7 @@
 <h2>Welcome ${username}</h2>
 
 <section>
+    <div class="container">
     <table class="table mt-5">
         <tr>
             <th></th>
@@ -30,6 +31,7 @@
             </tr>
         </c:forEach>
     </table>
+    </div>
 </section>
 
 <jsp:include page="../include/footer.jsp"/>

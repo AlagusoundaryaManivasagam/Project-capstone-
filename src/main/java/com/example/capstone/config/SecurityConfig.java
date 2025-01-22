@@ -29,12 +29,14 @@ public class SecurityConfig {
 
         );*/
 
-        /*http.authorizeHttpRequests()
+        http.authorizeHttpRequests()
                 //require authentication for /customer/** and /employee/** endpoints
                 .requestMatchers("/entries/**").authenticated()
                 .requestMatchers("/budget/**").authenticated()
+                .requestMatchers("/summary/**").authenticated()
+                .requestMatchers("/profile/**").authenticated()
                 //rest all are free
-                .anyRequest().permitAll();*/
+                .anyRequest().permitAll();
 
         http.formLogin(formLogin -> formLogin
                 .loginPage("/login/login")

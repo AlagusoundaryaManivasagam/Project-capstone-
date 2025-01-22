@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -44,9 +45,21 @@ public class SummaryController {
     @Autowired
     private HandlerMapping resourceHandlerMapping;
 
+
     @GetMapping("/summary/summary")
-    public ModelAndView summary(CreateListFormBean form) {
+    public ModelAndView summary(@RequestParam(required = false) String a,
+                                @RequestParam(required = false) Integer b,
+                                CreateListFormBean form) {
+
         ModelAndView response = new ModelAndView();
+
+
+        if(a!= null && b!=null) {
+
+            String message = "Status of "+ a+","+b;
+            response.addObject("message", message);
+
+        }
         response.setViewName("summary/summary");
         String[] months={"January","February","March","April","May","June",
                 "July","August","September", "October","November","December"};

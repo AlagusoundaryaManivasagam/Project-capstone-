@@ -15,6 +15,20 @@
   <link rel="stylesheet" href="/pub/css/global.css"/>
   <%-- jquery is always loaded at the top of the file because its needed by so many other libraries --%>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <style>
+    .table-container{
+      display:flex;
+      justify-content: center;
+    }
+
+     .form_input_error {
+       color: red;
+     }
+
+
+  </style>
+
 </head>
 <body>
 <section>
@@ -79,3 +93,4 @@
     </div>
   </nav>
 </section>
+

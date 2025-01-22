@@ -7,6 +7,17 @@
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:include page="../include/header.jsp"/>
+
+<script>
+    function showAlert(message) {
+        alert(message);
+    }
+
+    window.onload = function() {
+        showAlert("Welcome!");
+    };
+</script>
+
 <style>
     .full {
         margin: 0;
@@ -103,7 +114,7 @@
                 </div>
                 <c:if test="${bindingResult.hasFieldErrors('confirmPassword')}">
                     <div class="row justify-content-center">
-                        <div class="col-sm-2"></div>
+
                         <div class="col-sm-10 col-lg-6">
                             <c:forEach var="error" items="${bindingResult.getFieldErrors('confirmPassword')}">
                                 <dd class="mb-0 form_input_error">${error.getDefaultMessage()}</dd>
@@ -112,6 +123,23 @@
                     </div>
                 </c:if>
 
+
+                <div class="mt-3 row justify-content center align-items center">
+                    <label class="col-sm-2 col-form-label">Gender</label>
+                    <div class="col-sm-10 col-lg-6">
+                        <input type="radio"   name="gender"  value="male">Male
+                        <input type="radio"  name="gender"  value="female">Female
+                        <input type="radio" name="gender"  value="others">Others</br>
+
+                    </div>
+                </div>
+
+                <div class="mt-3 row justify-content center align-items center">
+                    <div class="col-sm-10 col-lg-6">
+                        <input type="checkbox"   name="termsAndCondition"  value="termsAndCondition">I agree to TermsAndCondition
+
+                    </div>
+                </div>
 
 
                 <div class="mt-3 row justify-content-center align-items center">

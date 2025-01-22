@@ -40,7 +40,7 @@
             <div class="mt-3 row justify-content center align-items center">
                 <label for="amount" class="col-sm-2 col-form-label">Enter amount</label>
                 <div class="col-sm-10 col-lg-6 align-items center">
-                    <input type="number" class="form-control" id="amount" name="amount">
+                    <input type="text" class="form-control" id="amount" name="amount">
                 </div>
             </div>
             <c:if test="${bindingResult.hasFieldErrors('amount')}">
