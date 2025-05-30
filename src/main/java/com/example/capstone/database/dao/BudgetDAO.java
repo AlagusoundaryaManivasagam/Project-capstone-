@@ -10,8 +10,12 @@ import java.util.List;
 
 @Repository
 public interface BudgetDAO extends JpaRepository<Budget, Long> {
-    @Query("select b from Budget b where b.userId = :userId")
+    @Query("select b from Budget b where b.userId = :userId and b.month = :month and b.year = :year")
+    public List<Budget> getMonthBudgetEntries(int userId, int month, int year);
+
+    @Query("select b from Budget b where b.userId = :userId ")
     public List<Budget> getBudgetEntries(int userId);
+
 
     Budget findById(Integer budgetId);
 

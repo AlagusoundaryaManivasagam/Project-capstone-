@@ -20,4 +20,10 @@ public class CreateBudgetFormBean {
     private Float amount;
 
     private Integer userId;
+
+    @NotNull(message = "Month cannot be empty")
+    private String month;
+
+    @NotNull(message = "Year cannot be empty")
+    private Integer year;
 }

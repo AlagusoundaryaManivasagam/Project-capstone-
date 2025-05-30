@@ -82,7 +82,7 @@ public class SummaryController {
         int month= 0;
         int year = 0;
         if(form.getMonth()!= null && form.getYear()!=null) {
-            month=Month.valueOf(form.getMonth().trim().toUpperCase()).getValue();
+            month=Month.valueOf(String.valueOf(form.getMonth()).trim().toUpperCase()).getValue();
             year = form.getYear();
             incomes = entryDAO.getEntries(loggedInUser.getId(), flag,month,year );
         }else{

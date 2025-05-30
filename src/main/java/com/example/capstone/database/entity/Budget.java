@@ -38,4 +38,10 @@ public class Budget implements Serializable {
 
     @Column(name = "user_id", insertable = false, updatable = false)
     private Integer userId;
+
+    @Column(name = "month" )
+    private Integer month;
+
+    @Column(name = "year")
+    private Integer year;
 }

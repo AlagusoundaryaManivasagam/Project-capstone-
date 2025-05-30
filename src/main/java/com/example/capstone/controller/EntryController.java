@@ -10,6 +10,10 @@ import com.example.capstone.database.entity.User;
 import com.example.capstone.form.CreateEntryFormBean;
 import com.example.capstone.form.CreateListFormBean;
 import com.example.capstone.security.AuthenticatedUserService;
+import com.google.gson.Gson;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -19,14 +23,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.mysql.cj.conf.PropertyKey.logger;
@@ -55,14 +62,22 @@ public class EntryController {
         log.debug("{} ",form.getYear() );
         log.debug("{}", form.getMonth());
         if(form.getYear()!= null && form.getMonth()!= null){
-            int month= Month.valueOf(form.getMonth().trim().toUpperCase()).getValue();
-            int year = form.getYear();
-            List<Entry> incomes = entryDAO.getEntries(loggedInUser.getId(), flag, month, year);
-            response.addObject("month", form.getMonth());
-            response.addObject("year", year);
-            response.addObject("incomes", incomes);
-            response.addObject("size",incomes.size());
-
+            try {
+                int month = Month.valueOf(String.valueOf(form.getMonth()).trim().toUpperCase()).getValue();
+                int year = form.getYear();
+                List<Entry> incomes = entryDAO.getEntries(loggedInUser.getId(), flag, month, year);
+                response.addObject("month", form.getMonth());
+                response.addObject("year", year);
+                response.addObject("incomes", incomes);
+                response.addObject("size", incomes.size());
+            }catch (IllegalArgumentException e) {
+                // Handle invalid month input
+                response.addObject("error", "Invalid month provided");
+            } catch (Exception e) {
+                // Handle other potential exceptions
+                response.addObject("error", "An error occurred while fetching data");
+                e.printStackTrace();
+            }
         }else {
             Calendar calendar = Calendar.getInstance();
             int month = calendar.get(Calendar.MONTH) + 1;
@@ -187,14 +202,27 @@ public class EntryController {
 
     }
 
+    @GetMapping("/getItemsByDate")
+    @ResponseBody
+    public List<Budget> getItemsByDate(@RequestParam String date) {
+        // Call the service to get items based on the date
+        User loggedInUser = authenticatedUserService.loadCurrentUser();
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+
+        int m = localDate.getMonthValue();
+        int y = localDate.getYear();
+        List<Budget> items = budgetDAO.getMonthBudgetEntries(loggedInUser.getId(), m, y);
+        return items;
+    }
+
     @GetMapping("/entries/expense")
-    public ModelAndView expense(CreateListFormBean form, BindingResult bindingResult){
+    public ModelAndView expense (CreateListFormBean form, BindingResult bindingResult) throws IOException {
         ModelAndView response= new ModelAndView();
         response.setViewName("entries/expense");
         User loggedInUser = authenticatedUserService.loadCurrentUser();
         String flag = "e";
         if(form.getYear()!= null && form.getMonth()!= null){
-            int month= Month.valueOf(form.getMonth().trim().toUpperCase()).getValue();
+            int month= Month.valueOf(String.valueOf(form.getMonth()).trim().toUpperCase()).getValue();
             int year = form.getYear();
             List<Entry> expenses = entryDAO.getEntries(loggedInUser.getId(), flag, month, year);
             response.addObject("month", form.getMonth());
@@ -209,13 +237,18 @@ public class EntryController {
             List<Entry> expenses = entryDAO.getEntries(loggedInUser.getId(), flag, month, year);
             response.addObject("expenses", expenses);
         }
-        List<Budget> budgets = budgetDAO.getBudgetEntries(loggedInUser.getId());
-        response.addObject("budgets", budgets);
+
+        Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH);
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+
+        List<Budget> budgets = budgetDAO.getMonthBudgetEntries(loggedInUser.getId(),month, year);
+            response.addObject("budgets", budgets);
+
 
 
         String[] months={"January","February","March","April","May","June",
                 "July","August","September", "October","November","December"};
-        Calendar calendar = Calendar.getInstance();
         int current= calendar.get(Calendar.MONTH);
         String currentMonth = months[current];
         response.addObject("months",months);

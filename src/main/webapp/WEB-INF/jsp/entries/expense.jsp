@@ -7,7 +7,32 @@
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:include page="../include/header.jsp"/>
-
+<script>
+        $(document).ready(function() {
+            $('#date').change(function() {
+                var selectedDate = $(this).val();
+                if (selectedDate) {
+                    $.ajax({
+                        url: 'getItemsByDate', // The URL to your controller
+                        type: 'GET',
+                        data: { date: selectedDate },
+                        success: function(data) {
+                            $('#budgetCategory').empty(); // Clear existing options
+                            $('#budgetCategory').append('<option value="">Select Item</option>');
+                            $.each(data, function(index, item) {
+                                $('#budgetCategory').append('<option value="' + item.id + '">' + item.name + '</option>');
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('AJAX Error: ' + status + error);
+                        }
+                    });
+                } else {
+                    $('#budgetCategory').empty(); // Clear dropdown if no date is selected
+                }
+            });
+        });
+    </script>
 <section class=" py-5">
     <div class="container">
         <div class="row">
@@ -61,7 +86,7 @@
             <div class="mt-3 row justify-content center align-items center">
                 <label for="date" class="col-sm-2 col-form-label">Enter date</label>
                 <div class="col-sm-10 col-lg-6 align-items center">
-                    <input type="date" class="form-control" id="date" name="date">
+                    <input type="date" class="form-control" id="date" name="date" onchange="fetchEvents()">
                 </div>
             </div>
             <c:if test="${bindingResult.hasFieldErrors('date')}">
@@ -79,7 +104,7 @@
                 <label for="budgetCategory" class="col-sm-2 col-form-label">Choose Budget Category</label>
                 <div class="col-sm-10 col-lg-6 align-items center">
                     <select name="budgetCategory" id="budgetCategory" class="form-control" >
-                        <option value=""></option>
+                        <option value="">Select an option</option>
                         <c:forEach var="budget" items="${budgets}">
                             <option value="${budget.id}">${budget.description}</option>
                         </c:forEach>

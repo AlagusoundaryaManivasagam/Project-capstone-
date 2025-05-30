@@ -54,6 +54,43 @@
                 </div>
             </c:if>
 
+            <div class="mt-3 row justify-content center align-items center">
+                <label for="month" class="col-sm-2 col-form-label">Choose month And year</label>
+                <div class="col-sm-10 col-lg-6 align-items center">
+                    <select id="month" name="month">
+                        <option value=""></option>
+
+                        <c:forEach var="month"  items="${months}">
+                            <option value="${month}">
+                                    ${month}
+                            </option>
+                        </c:forEach>
+
+                    </select>
+                    <select id="year" name="year">
+                        <option value=""></option>
+
+                        <c:forEach var="year"  items="${years}">
+                            <option value="${year}">
+                                    ${year}
+                            </option>
+                        </c:forEach>
+
+                    </select>
+
+                </div>
+            </div>
+            <c:if test="${bindingResult.hasFieldErrors('month')}">
+                <div class="row justify-content-center">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10 col-lg-6">
+                        <c:forEach var="error" items="${bindingResult.getFieldErrors('month')}">
+                            <dd class="mb-0 form_input_error">${error.getDefaultMessage()}</dd>
+                        </c:forEach>
+                    </div>
+                </div>
+            </c:if>
+
 
             <div class="mt-3 row justify-content-center align-items center">
                 <div class="col-sm-12 col-lg-8 align-items center">
@@ -73,6 +110,12 @@
     </section>
 </c:if>
 
+<c:if test="${ month!= null &&  year!= null && size != null}">
+    <div>
+        <h5>Budget Entries for ${month}, ${year}(${size})</h5>
+    </div>
+
+</c:if>
 
 <c:if test="${not empty budgets}">
 <section>
