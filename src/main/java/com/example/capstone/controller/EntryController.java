@@ -59,8 +59,6 @@ public class EntryController {
         response.setViewName("entries/income");
         User loggedInUser = authenticatedUserService.loadCurrentUser();
         String flag = "i";
-        log.debug("{} ",form.getYear() );
-        log.debug("{}", form.getMonth());
         if(form.getYear()!= null && form.getMonth()!= null){
             try {
                 int month = Month.valueOf(String.valueOf(form.getMonth()).trim().toUpperCase()).getValue();
@@ -202,9 +200,9 @@ public class EntryController {
 
     }
 
-    @GetMapping("/getItemsByDate")
+    @GetMapping("/entries/getBudgetsByDate")
     @ResponseBody
-    public List<Budget> getItemsByDate(@RequestParam String date) {
+    public String getBudgetsByDate(@RequestParam String date) {
         // Call the service to get items based on the date
         User loggedInUser = authenticatedUserService.loadCurrentUser();
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
@@ -212,7 +210,19 @@ public class EntryController {
         int m = localDate.getMonthValue();
         int y = localDate.getYear();
         List<Budget> items = budgetDAO.getMonthBudgetEntries(loggedInUser.getId(), m, y);
-        return items;
+        StringBuilder html = new StringBuilder();
+        
+        
+        for (Budget item : items) {
+            html.append("<option value=\"")
+                .append(item.getId())
+                .append("\">")
+                .append(item.getDescription())
+                .append("</option>");
+        }
+        
+        
+        return html.toString();
     }
 
     @GetMapping("/entries/expense")
@@ -390,4 +400,6 @@ public class EntryController {
         return response;
 
     }
+    
+    
 }

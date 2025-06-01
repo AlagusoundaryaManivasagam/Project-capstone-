@@ -13,15 +13,13 @@
                 var selectedDate = $(this).val();
                 if (selectedDate) {
                     $.ajax({
-                        url: 'getItemsByDate', // The URL to your controller
+                        url: 'getBudgetsByDate', // The URL to your controller
                         type: 'GET',
                         data: { date: selectedDate },
-                        success: function(data) {
+                        success: function(response) {
                             $('#budgetCategory').empty(); // Clear existing options
                             $('#budgetCategory').append('<option value="">Select Item</option>');
-                            $.each(data, function(index, item) {
-                                $('#budgetCategory').append('<option value="' + item.id + '">' + item.name + '</option>');
-                            });
+                            $('#budgetCategory').append(response);
                         },
                         error: function(xhr, status, error) {
                             console.error('AJAX Error: ' + status + error);
