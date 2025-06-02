@@ -13,6 +13,8 @@ import com.example.capstone.form.CreateEntryFormBean;
 import com.example.capstone.form.CreateListFormBean;
 import com.example.capstone.security.AuthenticatedUserService;
 import lombok.extern.slf4j.Slf4j;
+import service.implementation.DateServiceImpl;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,8 @@ public class SummaryController {
     @Qualifier("resourceHandlerMapping")
     @Autowired
     private HandlerMapping resourceHandlerMapping;
+    @Autowired
+    private DateServiceImpl dateServiceImpl;
 
 
     @GetMapping("/summary/summary")
@@ -61,18 +65,14 @@ public class SummaryController {
 
         }
         response.setViewName("summary/summary");
-        String[] months={"January","February","March","April","May","June",
-                "July","August","September", "October","November","December"};
+        String[] months=dateServiceImpl.giveMonths();
         Calendar calendar = Calendar.getInstance();
         int current= calendar.get(Calendar.MONTH);
         String currentMonth = months[current];
         response.addObject("months",months);
         response.addObject("currentMonth",currentMonth);
-        List<Integer> years = new ArrayList<>();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        for (int i = 2000; i <= currentYear + 10; i++) { // Next 10 years
-            years.add(i);
-        }
+        List<Integer> years = dateServiceImpl.giveYears();
         response.addObject("years",years);
         response.addObject("currentYear",currentYear);
 

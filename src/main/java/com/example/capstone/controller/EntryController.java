@@ -16,6 +16,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import service.implementation.DateServiceImpl;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +54,8 @@ public class EntryController {
     private AuthenticatedUserService authenticatedUserService;
     @Autowired
     private BudgetEntryDAO budgetEntryDAO;
+    @Autowired
+    private DateServiceImpl dateServiceImpl;
 
     @GetMapping("/entries/income")
     public ModelAndView income(CreateListFormBean form){
@@ -84,18 +88,15 @@ public class EntryController {
             response.addObject("incomes", incomes);
 
         }
-        String[] months={"January","February","March","April","May","June",
-                "July","August","September", "October","November","December"};
+       
+        String[] months=dateServiceImpl.giveMonths();
         Calendar calendar = Calendar.getInstance();
         int current= calendar.get(Calendar.MONTH);
         String currentMonth = months[current];
         response.addObject("months",months);
         response.addObject("currentMonth",currentMonth);
-        List<Integer> years = new ArrayList<>();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        for (int i = 2000; i <= currentYear + 10; i++) { // Next 10 years
-            years.add(i);
-        }
+        List<Integer> years = dateServiceImpl.giveYears();
         response.addObject("years",years);
         response.addObject("currentYear",currentYear);
 
@@ -140,18 +141,14 @@ public class EntryController {
             List<Entry> incomes = entryDAO.getEntries(loggedInUser.getId(), flag, month, year);
             response.addObject("incomes", incomes);
 
-            String[] months={"January","February","March","April","May","June",
-                    "July","August","September", "October","November","December"};
+            String[] months=dateServiceImpl.giveMonths();
             Calendar calendar = Calendar.getInstance();
             int current= month-1;
             String currentMonth = months[current];
             response.addObject("months",months);
             response.addObject("currentMonth",currentMonth);
-            List<Integer> years = new ArrayList<>();
             int cYear = Calendar.getInstance().get(Calendar.YEAR);
-            for (int i = 2000; i <= cYear + 10; i++) { // Next 10 years
-                years.add(i);
-            }
+            List<Integer> years = dateServiceImpl.giveYears();
             int currentYear = year;
             response.addObject("years",years);
             response.addObject("currentYear",currentYear);
@@ -257,17 +254,13 @@ public class EntryController {
 
 
 
-        String[] months={"January","February","March","April","May","June",
-                "July","August","September", "October","November","December"};
+        String[] months=dateServiceImpl.giveMonths();
         int current= calendar.get(Calendar.MONTH);
         String currentMonth = months[current];
         response.addObject("months",months);
         response.addObject("currentMonth",currentMonth);
-        List<Integer> years = new ArrayList<>();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        for (int i = 2000; i <= currentYear + 10; i++) { // Next 10 years
-            years.add(i);
-        }
+        List<Integer> years = dateServiceImpl.giveYears();
         response.addObject("years",years);
         response.addObject("currentYear",currentYear);
 
@@ -339,18 +332,14 @@ public class EntryController {
             response.addObject("expenses",expenses);
             //response.setViewName("redirect:/entries/expense");
         }
-        String[] months={"January","February","March","April","May","June",
-                "July","August","September", "October","November","December"};
+        String[] months=dateServiceImpl.giveMonths();
         Calendar calendar = Calendar.getInstance();
         int current= calendar.get(Calendar.MONTH);
         String currentMonth = months[current];
         response.addObject("months",months);
         response.addObject("currentMonth",currentMonth);
-        List<Integer> years = new ArrayList<>();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        for (int i = 2000; i <= currentYear + 10; i++) { // Next 10 years
-            years.add(i);
-        }
+        List<Integer> years = dateServiceImpl.giveYears();
         response.addObject("years",years);
         response.addObject("currentYear",currentYear);
 

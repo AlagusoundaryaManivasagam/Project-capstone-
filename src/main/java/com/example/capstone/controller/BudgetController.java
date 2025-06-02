@@ -7,6 +7,8 @@ import com.example.capstone.form.CreateBudgetFormBean;
 import com.example.capstone.security.AuthenticatedUserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import service.implementation.DateServiceImpl;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,29 +35,29 @@ public class BudgetController {
     private AuthenticatedUserService authenticatedUserService;
     @Autowired
     private BudgetDAO budgetDAO;
+    @Autowired 
+    private DateServiceImpl dateServiceImpl;
 
     @GetMapping("/budget/budget")
     public ModelAndView budget(){
         ModelAndView response = new ModelAndView();
         response.setViewName("budget/budget");
         User user = authenticatedUserService.loadCurrentUser();
-        List<Budget> budgets = budgetDAO.getBudgetEntries(user.getId());
-        response.addObject("budgets", budgets);
+        
 
-        String[] months={"January","February","March","April","May","June",
-                "July","August","September", "October","November","December"};
+        String[] months=dateServiceImpl.giveMonths();
         Calendar calendar = Calendar.getInstance();
         int current= calendar.get(Calendar.MONTH);
         String currentMonth = months[current];
         response.addObject("months",months);
         response.addObject("currentMonth",currentMonth);
-        List<Integer> years = new ArrayList<>();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        for (int i = 2000; i <= currentYear + 10; i++) { // Next 10 years
-            years.add(i);
-        }
+
+        List<Integer> years = dateServiceImpl.giveYears();
         response.addObject("years",years);
         response.addObject("currentYear",currentYear);
+        List<Budget> budgets = budgetDAO.getMonthBudgetEntries(user.getId(),current,currentYear);
+        response.addObject("budgets", budgets);
 
 
         return response;
@@ -99,17 +101,12 @@ public class BudgetController {
             List<Budget> budgets = budgetDAO.getMonthBudgetEntries(user.getId(), month, year);
             response.addObject("budgets", budgets);
             response.addObject("size", budgets.size());
-            String[] months={"January","February","March","April","May","June",
-                    "July","August","September", "October","November","December"};
+            String[] months= dateServiceImpl.giveMonths();
             Calendar calendar = Calendar.getInstance();
             response.addObject("months",months);
             response.addObject("month", month);
             response.addObject("year", year);
-            List<Integer> years = new ArrayList<>();
-            int cYear = Calendar.getInstance().get(Calendar.YEAR);
-            for (int i = 2000; i <= cYear + 10; i++) { // Next 10 years
-                years.add(i);
-            }
+            List<Integer> years = dateServiceImpl.giveYears();
             response.addObject("years",years);
             response.setViewName("budget/budget");
 
