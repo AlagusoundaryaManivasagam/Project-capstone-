@@ -12,8 +12,9 @@ import com.example.capstone.dto.SummaryDTO;
 import com.example.capstone.form.CreateEntryFormBean;
 import com.example.capstone.form.CreateListFormBean;
 import com.example.capstone.security.AuthenticatedUserService;
+import com.example.capstone.service.implementation.DateServiceImpl;
+
 import lombok.extern.slf4j.Slf4j;
-import service.implementation.DateServiceImpl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,19 +52,11 @@ public class SummaryController {
 
 
     @GetMapping("/summary/summary")
-    public ModelAndView summary(@RequestParam(required = false) String a,
-                                @RequestParam(required = false) Integer b,
-                                CreateListFormBean form) {
+    public ModelAndView summary(CreateListFormBean form) {
 
         ModelAndView response = new ModelAndView();
 
 
-        if(a!= null && b!=null) {
-
-            String message = "Status of "+ a+","+b;
-            response.addObject("message", message);
-
-        }
         response.setViewName("summary/summary");
         String[] months=dateServiceImpl.giveMonths();
         Calendar calendar = Calendar.getInstance();
@@ -81,21 +74,32 @@ public class SummaryController {
         List<Entry> incomes = new ArrayList<>();
         int month= 0;
         int year = 0;
+        
         if(form.getMonth()!= null && form.getYear()!=null) {
             month=Month.valueOf(String.valueOf(form.getMonth()).trim().toUpperCase()).getValue();
             year = form.getYear();
-            incomes = entryDAO.getEntries(loggedInUser.getId(), flag,month,year );
+            String message = "Status of "+ form.getMonth()+","+year;
+            response.addObject("message", message);
+            
         }else{
             month = calendar.get(Calendar.MONTH) + 1;
             year = calendar.get(Calendar.YEAR);
-            incomes = entryDAO.getEntries(loggedInUser.getId(), flag, month, year);
+            String[] m = dateServiceImpl.giveMonths();
+            String message = "Status of "+m[month -1]+","+year;
+            response.addObject("message", message);
+
+            
         }
+        
+        
+
+        incomes = entryDAO.getEntries(loggedInUser.getId(), flag,month,year );
         float totalAmount = 0;
         for(Entry income:incomes){
             totalAmount+=income.getAmount();
         }
         response.addObject("totalAmount",totalAmount);
-        List<Budget> budgets = budgetDAO.getBudgetEntries(loggedInUser.getId());
+        List<Budget> budgets = budgetDAO.getMonthBudgetEntries(loggedInUser.getId(),month,year);
         float budgetedAmount =0;
         for(Budget budget:budgets){
             budgetedAmount+= budget.getAmount();

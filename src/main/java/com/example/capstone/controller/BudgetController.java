@@ -2,12 +2,15 @@ package com.example.capstone.controller;
 
 import com.example.capstone.database.dao.BudgetDAO;
 import com.example.capstone.database.entity.Budget;
+import com.example.capstone.database.entity.Entry;
 import com.example.capstone.database.entity.User;
 import com.example.capstone.form.CreateBudgetFormBean;
+import com.example.capstone.form.CreateListFormBean;
 import com.example.capstone.security.AuthenticatedUserService;
+import com.example.capstone.service.implementation.DateServiceImpl;
+
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import service.implementation.DateServiceImpl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +42,7 @@ public class BudgetController {
     private DateServiceImpl dateServiceImpl;
 
     @GetMapping("/budget/budget")
-    public ModelAndView budget(){
+    public ModelAndView budget(CreateListFormBean form){
         ModelAndView response = new ModelAndView();
         response.setViewName("budget/budget");
         User user = authenticatedUserService.loadCurrentUser();
@@ -58,6 +61,33 @@ public class BudgetController {
         response.addObject("currentYear",currentYear);
         List<Budget> budgets = budgetDAO.getMonthBudgetEntries(user.getId(),current,currentYear);
         response.addObject("budgets", budgets);
+
+        if(form.getYear()!= null && form.getMonth()!= null){
+            try {
+                int month = Month.valueOf(String.valueOf(form.getMonth()).trim().toUpperCase()).getValue();
+                int year = form.getYear();
+                List<Budget> monthBudgets = budgetDAO.getMonthBudgetEntries(user.getId(), month, year);
+                response.addObject("month", form.getMonth());
+                response.addObject("year", year);
+                response.addObject("monthBudgets", monthBudgets);
+                response.addObject("size", monthBudgets.size());
+            }catch (IllegalArgumentException e) {
+                // Handle invalid month input
+                response.addObject("error", "Invalid month provided");
+            } catch (Exception e) {
+                // Handle other potential exceptions
+                response.addObject("error", "An error occurred while fetching data");
+                e.printStackTrace();
+            }
+        }else {
+            //Calendar calendar = Calendar.getInstance();
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int year = calendar.get(Calendar.YEAR);
+            List<Budget> monthBudgets = budgetDAO.getMonthBudgetEntries(user.getId(), month, year);
+            response.addObject("monthBudgets", monthBudgets);
+            
+        }
+       
 
 
         return response;

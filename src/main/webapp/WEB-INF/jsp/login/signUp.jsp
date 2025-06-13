@@ -124,7 +124,7 @@
                 </c:if>
 
 
-                <div class="mt-3 row justify-content center align-items center">
+               <!-- <div class="mt-3 row justify-content center align-items center">
                     <label class="col-sm-2 col-form-label">Gender</label>
                     <div class="col-sm-10 col-lg-6">
                         <input type="radio"   name="gender"  value="male">Male
@@ -141,7 +141,7 @@
                     </div>
                 </div>
 
-
+-->
                 <div class="mt-3 row justify-content-center align-items center">
                     <div class="col-sm-12 col-lg-8 align-items center">
                         <button type="submit" class="btn btn-primary">Submit</button>

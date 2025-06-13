@@ -12,7 +12,25 @@
     .table-container{
         display:flex;
         justify-content: center;
+	
     }
+	.table-a{
+		width:40%;
+		padding:10px;
+		font-size:20px;
+		font-weight:300;
+	}
+	section{
+		margin: 15px;
+	}
+	form{
+		margin:15px;
+	}
+	button{
+		margin:15px;
+	}
+	
+	
 </style>
 <section class=" py-5">
     <div class="container">
@@ -25,8 +43,8 @@
 
 <section>
     <div class="container">
-        <div class="table-container">
-        <table class="table-mt-5 ">
+        <div class="container table-container">
+        <table class="table-mt-5 table-a">
             <tr>
                 <td>Total Income</td>
                 <td>${totalAmount}</td>
@@ -74,10 +92,10 @@
                     </c:forEach>
 
                 </select>
-
+				</div>
                 <button type="submit" class="btn btn-primary">Submit</button>
 
-            </div>
+            
             </form>
         </div>
 </div>

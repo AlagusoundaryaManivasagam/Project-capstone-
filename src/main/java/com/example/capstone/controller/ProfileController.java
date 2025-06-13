@@ -56,12 +56,7 @@ public class ProfileController {
             dateDTO.setYear(date.getYear());
             monthsYears.add(dateDTO);
         }
-        List<Budget> budgets = budgetDAO.getBudgetEntries(loggedInUser.getId());
-        float budgetedAmount =0;
-        for(Budget budget:budgets){
-            budgetedAmount+= budget.getAmount();
-        }
-
+        
 
         List<ProfileDTO> profileDTOs = new ArrayList<>();
         for(DateDTO monthYear : monthsYears) {
@@ -73,6 +68,11 @@ public class ProfileController {
             }
             ProfileDTO profileDTO = new ProfileDTO();
             profileDTO.setTotalIncome(totalIncome);
+            List<Budget> budgets = budgetDAO.getMonthBudgetEntries(loggedInUser.getId(), monthYear.getMonth(), monthYear.getYear());
+            float budgetedAmount =0;
+            for(Budget budget:budgets){
+               budgetedAmount+= budget.getAmount();
+            }
             profileDTO.setBudgetedAmount(budgetedAmount);
             flag = "e";
             List<Entry> expenses = entryDAO.getEntries(loggedInUser.getId(),flag,monthYear.getMonth(),monthYear.getYear());

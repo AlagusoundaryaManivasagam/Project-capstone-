@@ -1,4 +1,4 @@
-package service;
+package com.example.capstone.service;
 
 import java.util.List;
 

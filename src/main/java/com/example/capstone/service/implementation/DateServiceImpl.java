@@ -1,11 +1,14 @@
-package service.implementation;
+package com.example.capstone.service.implementation;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import service.DateService;
+import org.springframework.stereotype.Service;
 
+import com.example.capstone.service.DateService;
+
+@Service
 public class DateServiceImpl implements DateService{
 
 	@Override
