@@ -70,7 +70,10 @@
           <li class="nav-item">
             <a class="nav-link" href="/summary/summary">Financial Summary</a>
           </li>
-
+		  <li class="nav-item">
+            <a class="nav-link" href="/amortization/ac">Amortization calculator</a>
+          </li>
+		  
           <sec:authorize access="isAuthenticated()">
             <li class="nav-item">
               <a class="nav-link" href="/login/logout">Logout</a>
