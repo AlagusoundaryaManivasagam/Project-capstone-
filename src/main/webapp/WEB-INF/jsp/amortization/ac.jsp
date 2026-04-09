@@ -22,7 +22,7 @@ gap:1px;
 			<div class="mt-3 row justify-content center align-items center">
                 <label for="loanAmount" class="col-sm-2 col-form-label">Loan Amount</label>
                 <div class="col-sm-10 col-lg-6 align-items center">
-                    <input type="number" class="form-control" id="loanAmount" name="loanAmount">
+                    <input type="number" class="form-control" id="loanAmount" name="loanAmount" value = "${form.loanAmount}">
                 </div>
             </div>
             <c:if test="${bindingResult.hasFieldErrors('loanAmount')}">
@@ -38,8 +38,8 @@ gap:1px;
             <div class="mt-3 row justify-content center align-items center">
                 <label for="loanTerm" class="col-sm-2 col-form-label">Loan Term</label>
                 <div class="col-sm-10 col-lg-6 align-items center sbs">
-                    <input  type="number" class="form-control" id="loanTerm" name="loanTerm" placeholder="years">
-                    <input  type="number" class="form-control" id="loanTermMonths" name="loanTermMonths" placeholder="months">
+                    <input  type="number" class="form-control" id="loanTerm" name="loanTerm" value = "${form.loanTerm}" placeholder="years">
+                    <input  type="number" class="form-control" id="loanTermMonths" name="loanTermMonths" value = "${form.loanTermMonths}" placeholder="months">
                 
                 </div>
             </div>
@@ -56,7 +56,7 @@ gap:1px;
             <div class="mt-3 row justify-content center align-items center">
                 <label for="interestRate" class="col-sm-2 col-form-label">Interest Rate</label>
                 <div class="col-sm-10 col-lg-6 align-items center">
-                    <input type="number" class="form-control" id="interestRate" name="interestRate">
+                    <input type="number" class="form-control" id="interestRate" name="interestRate" value = "${form.interestRate}">
                 </div>
             </div>
             <c:if test="${bindingResult.hasFieldErrors('interestRate')}">
@@ -71,11 +71,20 @@ gap:1px;
                         </c:if>
 			<div class="mt-3 row justify-content-center align-items center">
                 <div class="col-sm-12 col-lg-8 align-items center">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Calculate</button>
                 </div>
             </div>
 			
 		</form>
+		<c:if test="${details != null}">
+            <div>
+                <h6>Monthly Payment is ${details.mp}</h6>
+                <h6>Total Payment is ${details.tp}</h6>
+                <h6>Total Interest is ${details.i}</h6>
+
+            </div>
+
+        </c:if>
     </div>
 </section>
 

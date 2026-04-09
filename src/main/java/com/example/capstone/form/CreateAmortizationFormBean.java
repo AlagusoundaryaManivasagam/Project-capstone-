@@ -11,8 +11,11 @@ public class CreateAmortizationFormBean {
 	@NotNull(message = "Loan amount is required")
     private Float loanAmount;
 	
-	@NotNull(message = "Loan term is required")
+	@NotNull(message = "Field years is required")
     private Float loanTerm;
+
+    @NotNull(message = "Field months is required")
+    private Float loanTermMonths;
 
 	@NotNull(message = "Interest Rate is required")
     private Float interestRate;

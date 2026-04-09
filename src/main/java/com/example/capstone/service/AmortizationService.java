@@ -1,6 +1,9 @@
 package com.example.capstone.service;
 
+import com.example.capstone.dto.LoanDetailsDTO;
+import com.example.capstone.form.CreateAmortizationFormBean;
+
 public interface AmortizationService {
 
-	float monthlyPayment(float p, float n, float r);
+	LoanDetailsDTO monthlyPayment(CreateAmortizationFormBean form);
 }

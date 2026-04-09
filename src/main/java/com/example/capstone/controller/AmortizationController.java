@@ -1,5 +1,9 @@
 package com.example.capstone.controller;
 
+import com.example.capstone.database.dao.EntryDAO;
+import com.example.capstone.dto.LoanDetailsDTO;
+import com.example.capstone.service.AmortizationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -14,9 +18,12 @@ import com.example.capstone.form.CreateBudgetFormBean;
 
 import jakarta.validation.Valid;
 
+
 @Controller
 public class AmortizationController {
 	private static final Logger LOG = LoggerFactory.getLogger(EntryController.class);
+	@Autowired
+	private AmortizationService amortizationService;
 	@GetMapping("/amortization/ac")
 	public ModelAndView display(){
 		ModelAndView response = new ModelAndView();
@@ -38,6 +45,11 @@ public class AmortizationController {
 			response.addObject("bindingResult", bindingResult);
 			response.addObject("form", form);
 
+		}
+		else{
+			LoanDetailsDTO details = amortizationService.monthlyPayment(form);
+			response.addObject("form",form);
+			response.addObject("details",details);
 		}
 		return response;
 	}
