@@ -5,6 +5,10 @@ import com.example.capstone.form.CreateAmortizationFormBean;
 import com.example.capstone.service.AmortizationService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 public class AmortizationServiceImpl implements AmortizationService{
 
@@ -17,7 +21,15 @@ public class AmortizationServiceImpl implements AmortizationService{
 		double mp = p*mrate*Math.pow((1+mrate),n)/(Math.pow((1+mrate),n)-1);
 		double tp = mp*n;
 		double i = tp - p;
-		return new LoanDetailsDTO(mp, tp, i);
+		List<List<Object>> schedule = new ArrayList<>();
+		double b = p;
+		for(int j=1; j<n+1;j++){
+			double ip = b*mrate;
+			double pp = mp - ip;
+			b -= pp;
+			schedule.add(Arrays.asList(j,ip,pp,Math.max(0,b)));
+		}
+		return new LoanDetailsDTO(mp, tp, i,schedule);
 	}
 
 

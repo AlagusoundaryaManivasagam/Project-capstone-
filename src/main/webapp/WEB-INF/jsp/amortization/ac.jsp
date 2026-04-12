@@ -83,7 +83,30 @@ gap:1px;
                 <h6>Total Interest is ${details.i}</h6>
 
             </div>
+            <section>
+                <div class="container">
+                    <table class="table mt-5">
+                    <tr>
+                        <th>No</th>
+                        <th>Monthly Payment</th>
+                        <th>Interest Part</th>
+                        <th>Principle Part</th>
+                        <th>Balance</th>
+                    </tr>
 
+                    <c:forEach var="schedule" items = "${details.schedule}">
+                        <tr>
+                            <td>${schedule.get(0)}</td>
+                            <td>${details.mp}</td>
+                            <td>${schedule.get(1)}</td>
+                            <td>${schedule.get(2)}</td>
+                            <td>${schedule.get(3)}</td>
+
+                        </tr>
+                    </c:forEach>
+                    </table>
+                </div>
+            </section>
         </c:if>
     </div>
 </section>
