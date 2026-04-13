@@ -1,4 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
 <jsp:include page="../include/header.jsp"/>
 
 <style>
@@ -78,9 +81,9 @@ gap:1px;
 		</form>
 		<c:if test="${details != null}">
             <div>
-                <h6>Monthly Payment is ${details.mp}</h6>
-                <h6>Total Payment is ${details.tp}</h6>
-                <h6>Total Interest is ${details.i}</h6>
+                <h6>Monthly Payment is <fmt:formatNumber value=" ${details.mp}" minFractionDigits="2" maxFractionDigits="2" /></h6>
+                <h6>Total Payment is <fmt:formatNumber value=" ${details.tp}" minFractionDigits="2" maxFractionDigits="2" /></h6>
+                <h6>Total Interest is <fmt:formatNumber value=" ${details.i}" minFractionDigits="2" maxFractionDigits="2" /></h6>
 
             </div>
             <section>
@@ -89,20 +92,19 @@ gap:1px;
                     <tr>
                         <th>No</th>
                         <th>Monthly Payment</th>
-                        <th>Interest Part</th>
                         <th>Principle Part</th>
+                        <th>Interest Part</th>
                         <th>Balance</th>
                     </tr>
 
                     <c:forEach var="schedule" items = "${details.schedule}">
-                        <tr>
-                            <td>${schedule.get(0)}</td>
-                            <td>${details.mp}</td>
-                            <td>${schedule.get(1)}</td>
-                            <td>${schedule.get(2)}</td>
-                            <td>${schedule.get(3)}</td>
-
-                        </tr>
+                         <tr>
+                                <td>${schedule.get(0)}</td>
+                                <td><fmt:formatNumber value="${details.mp}" minFractionDigits="2" maxFractionDigits="2" /></td>
+                                <td><fmt:formatNumber value="${schedule.get(2)}" minFractionDigits="2" maxFractionDigits="2" /></td>
+                                <td><fmt:formatNumber value="${schedule.get(1)}" minFractionDigits="2" maxFractionDigits="2" /></td>
+                                <td><fmt:formatNumber value="${schedule.get(3)}" minFractionDigits="2" maxFractionDigits="2" /></td>
+                            </tr>
                     </c:forEach>
                     </table>
                 </div>
