@@ -2,11 +2,12 @@ package com.example.capstone.controller;
 
 import com.example.capstone.database.dao.BudgetDAO;
 import com.example.capstone.database.entity.Budget;
-import com.example.capstone.database.entity.Entry;
 import com.example.capstone.database.entity.User;
+import com.example.capstone.dto.BudgetDetailDTO;
 import com.example.capstone.form.CreateBudgetFormBean;
 import com.example.capstone.form.CreateListFormBean;
 import com.example.capstone.security.AuthenticatedUserService;
+import com.example.capstone.service.implementation.BudgetServiceImpl;
 import com.example.capstone.service.implementation.DateServiceImpl;
 
 import jakarta.validation.Valid;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -40,6 +40,8 @@ public class BudgetController {
     private BudgetDAO budgetDAO;
     @Autowired 
     private DateServiceImpl dateServiceImpl;
+    @Autowired
+    private BudgetServiceImpl budgetServiceImpl;
 
     @GetMapping("/budget/budget")
     public ModelAndView budget(CreateListFormBean form){
@@ -111,35 +113,17 @@ public class BudgetController {
 
         }else {
             //response.setViewName("budget/budget");
-            Budget budget = budgetDAO.findById(form.getId());
-
-            if(budget == null){
-                budget = new Budget();
-            }else{
-                String message = "Budget edited";
-                response.addObject("message", message);
-            }
-            budget.setAmount(form.getAmount());
-            budget.setDescription(form.getDescription());
-            budget.setUser(user);
-            budget.setMonth(Month.valueOf(form.getMonth().trim().toUpperCase()).getValue());
-            budget.setYear(form.getYear());
-
-            budgetDAO.save(budget);
-            int month = budget.getMonth();
-            int year = budget.getYear();
-            List<Budget> budgets = budgetDAO.getMonthBudgetEntries(user.getId(), month, year);
-            response.addObject("budgets", budgets);
-            response.addObject("size", budgets.size());
-            String[] months= dateServiceImpl.giveMonths();
-            Calendar calendar = Calendar.getInstance();
-            response.addObject("months",months);
-            response.addObject("month", month);
-            response.addObject("year", year);
-            List<Integer> years = dateServiceImpl.giveYears();
-            response.addObject("years",years);
+            BudgetDetailDTO model = budgetServiceImpl.createOrUpdateBudget(form,user);
             response.setViewName("budget/budget");
-
+            response.addObject("monthBudgets", model.getBudgets());
+            response.addObject("size", model.getSize());
+            response.addObject("months", model.getMonths());
+            response.addObject("month", model.getMonth());
+            response.addObject("year", model.getYear());
+            response.addObject("years", model.getYears());
+            if (model.getMessage() != null) {
+                response.addObject("message", model.getMessage());
+            }
         }
         return response;
     }
@@ -154,7 +138,13 @@ public class BudgetController {
         form.setDescription(budget.getDescription());
         form.setId(budget.getId());
         form.setUserId(budget.getUser().getId());
+        form.setYear(budget.getYear());
+        String[] months=dateServiceImpl.giveMonths();
+        form.setMonth(months[budget.getMonth()-1]);
         response.addObject("form", form);
+        response.addObject("months",months);
+        List<Integer> years = dateServiceImpl.giveYears();
+        response.addObject("years",years);
         return response;
     }
 
